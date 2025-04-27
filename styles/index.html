@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LaavoltSMP</title>
+    <link rel="shortcut icon" href="./images/cur.gif" type="image/x-icon">
+    <link rel="stylesheet" href="./styles/style.css">
+    <script src="https://kit.fontawesome.com/f6fde598ae.js" crossorigin="anonymous"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body>
+    <div class="cc site-wide">
+        <div class="pointer"></div>
+    </div>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1><img src="./images/model.png" alt="logo" style="width: 25%;"></h1>
+                <br>
+                <h3>IP:</h3>
+                <br>
+
+
+                <div class="ip tooltip">
+                    <p>
+                        <span id="myInput" onclick="copyToClipboard()" onmouseout="hideTooltip()" class="ipaddr">mc.laavolt.fun</span>
+                        <span class="tooltip-text">Click To Copy</span>
+                    </p>
+                </div>
+
+
+                <br>
+                <a href="https://dsc.gg/laavolt"><button class="dc"><i class='bx bxl-discord-alt'></i></button></a>
+            </div>
+        </div>
+    </section>
+
+    <section class="main staff-main">
+        <div class="container">
+            <div class="staff-content">
+                <h1>Our Staff</h1>
+                <div class="staff-con">
+
+                    <div class="box" data-color="clr1">
+                        <div class="imgbx"><img src="./images/dofi2.png" alt="Dofi | Owner"></div>
+                        <div class="glass">
+                            <h3>Dofii<br><span>Owner</span></h3>
+                            <ul>
+                                <a href="https://www.instagram.com/dofito20/" style="--i:1; color: #fb60a8;"><ion-icon name="logo-instagram"></ion-icon></a>
+                                <a href="https://www.youtube.com/@dofii2o" style="--i:2; color: #fb6060;"><ion-icon name="logo-youtube"></ion-icon></a>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="box" data-color="clr2">
+                        <div class="imgbx"><img src="./images/nyx2.png" alt="Nyx | Admin"></div>
+                        <div class="glass">
+                            <h3>Nyx<br><span>Admin</span></h3>
+                            <ul>
+                                <a href="https://www.instagram.com/adwaaaithhh/" style="--i:3; color: #fb60a8;"><ion-icon name="logo-instagram"></ion-icon></a>
+                                <a href="https://dsc.gg/nyxagency" style="--i:4; color: #7289DA;"><ion-icon name="logo-discord"></ion-icon></a>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="main">
+        <div class="container">
+            <h1>FAQ</h1>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleAnswer(this)">
+                    <h3>How to solve Uknown Server Error?</h3>
+                    <i class='bx bx-chevron-down'></i>
+                </div>
+                <div class="faq-answer">
+                    <p>
+                        <p><b>1.</b> Go to search in windows 🔍 and search view network connections 🖥️.</p>
+
+                        <p><b>2.</b> Right click your network connection 🛜 and select properties ⚙️.</p>
+
+                        <p><b>3.</b> In that scroll down until you see internet protocol version 4 ✅ and version 6, now disable version 6 ❌ and double click internet protocol ver 4 (do not disable ver 4 or your internet will be lost 🔻).</p>
+
+                        <p><b>4.</b> Click on the option "Use the following DNS server addresses" and  in that type:
+                        <br>
+                        <span class="dns">
+                        <b><span style="text-decoration: underline;">Preffered DNS Server</span>:</b> 1.1.1.1
+                        <br>
+                        <b><span style="text-decoration: underline;">Alternate DNS Server</span>:</b> 1.0.0.1
+                        </span></p>
+
+                        <p><b>5.</b> Then click ok and restart your pc</p>
+
+                        <p><b>Problem didn't get fixed?</b> Try reaching to us through our <a href="https://dsc.gg/laavolt" style="text-decoration: underline; color: #fb60a8;">Discord Server</a>.</p>
+
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <h1>By <span class="dofii">Dofii</span></h1>
+                <p>© 2025 LaavoltSMP. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+<script>
+function copyToClipboard() {
+    // Get the text content of the span
+    var copyText = document.getElementById("myInput").innerText;
+
+    // Copy the text to clipboard
+    navigator.clipboard.writeText(copyText);
+
+    // Optionally, you can display a confirmation message
+    alert("Copied to clipboard: " + copyText);
+}
+
+function toggleAnswer(element) {
+    const answer = element.nextElementSibling;
+    answer.classList.toggle('open');
+    const icon = element.querySelector('i');
+    icon.classList.toggle('bx-chevron-down');
+    icon.classList.toggle('bx-chevron-up');
+}
+</script>
+
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+</body>
+</html>

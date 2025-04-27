@@ -4,197 +4,92 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Laavolt SMP Status</title>
+  <link rel="shortcut icon" href="./images/cur.gif" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #1f1f1f, #2d2d2d);
-      color: #f0f0f0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-      overflow: hidden;
-      position: relative;
-    }
-
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 10px;
-      animation: fadeIn 2s;
-    }
-
-    p {
-      font-size: 1.2rem;
-      margin: 5px;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 0.5em 1em;
-      border-radius: 999px;
-      font-weight: bold;
-      margin-top: 10px;
-      font-size: 1rem;
-      animation: fadeIn 2s;
-      min-width: 120px;
-    }
-
-    .online {
-      background-color: #28a745;
-      color: white;
-      box-shadow: 0 0 15px #28a745;
-    }
-
-    .offline {
-      background-color: #dc3545;
-      color: white;
-      box-shadow: 0 0 15px #dc3545;
-    }
-
-    .loading {
-      background-color: #ffc107;
-      color: black;
-      box-shadow: 0 0 15px #ffc107;
-    }
-
-    .spinner {
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(0, 0, 0, 0.2);
-      border-top-color: black;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .copy-btn, .retry-btn {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      background-color: #007bff;
-      border: none;
-      border-radius: 10px;
-      color: white;
-      cursor: pointer;
-      transition: background 0.3s;
-      margin: 10px;
-    }
-
-    .copy-btn:hover, .retry-btn:hover {
-      background-color: #0056b3;
-    }
-
-    .button-group {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-
-    .toast {
-      position: absolute;
-      bottom: 30px;
-      background: #dc3545;
-      color: white;
-      padding: 10px 20px;
-      border-radius: 20px;
-      font-weight: bold;
-      animation: fadeIn 0.5s, fadeOut 0.5s 3.5s forwards;
-    }
-
-    @keyframes fadeOut {
-      to { opacity: 0; transform: translateY(20px); }
-    }
-
-  </style>
+  <link rel="stylesheet" href="./style.css">
+  <script src="https://kit.fontawesome.com/f6fde598ae.js" crossorigin="anonymous"></script>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 </head>
 <body>
 
-  <h1>🌿 Laavolt SMP</h1>
-  <p>IP: <strong id="server-ip">mc.laavolt.fun</strong></p>
-  <div id="status" class="badge loading">
-    <span id="status-text">Loading...</span>
-    <div class="spinner" id="spinner"></div>
+<div class="cc site-wide">
+      <div class="pointer"></div>
+</div>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <h1><img src="./images/model.png" alt="logo" style="width: 50%;"></h1>
+      <p>IP: <strong id="server-ip">mc.laavolt.fun</strong></p>
+      <div id="status" class="badge loading">
+        <span id="status-text">Loading...</span>
+        <div class="spinner" id="spinner"></div>
+      </div>
+      <p id="players">Players Online: --</p>
+
+      <div class="button-group">
+        <button class="copy-btn" onclick="copyIP()">Copy IP</button>
+        <button class="retry-btn" onclick="fetchStatus()">Retry</button>
+      </div>
+    </div>
   </div>
-  <p id="players">Players Online: --</p>
+</section>
+<script>
+  const serverIp = 'mc.laavolt.fun';
 
-  <div class="button-group">
-    <button class="copy-btn" onclick="copyIP()">Copy IP</button>
-    <button class="retry-btn" onclick="fetchStatus()">Retry</button>
-  </div>
+  async function fetchStatus() {
+    const statusDiv = document.getElementById('status');
+    const statusText = document.getElementById('status-text');
+    const spinner = document.getElementById('spinner');
+    const playersDiv = document.getElementById('players');
 
-  <script>
-    const serverIp = 'mc.laavolt.fun';
+    statusDiv.className = 'badge loading';
+    statusText.textContent = 'Loading...';
+    spinner.style.display = 'inline-block';
+    playersDiv.textContent = 'Players Online: --';
 
-    async function fetchStatus() {
-      const statusDiv = document.getElementById('status');
-      const statusText = document.getElementById('status-text');
-      const spinner = document.getElementById('spinner');
-      const playersDiv = document.getElementById('players');
+    try {
+      const res = await fetch(`https://api.mcsrvstat.us/2/${serverIp}`);
+      const data = await res.json();
 
-      statusDiv.className = 'badge loading';
-      statusText.textContent = 'Loading...';
-      spinner.style.display = 'inline-block';
-      playersDiv.textContent = 'Players Online: --';
-
-      try {
-        const res = await fetch(`https://api.mcsrvstat.us/2/${serverIp}`);
-        const data = await res.json();
-
-        if (data.online) {
-          statusDiv.className = 'badge online';
-          statusText.textContent = 'Online';
-          spinner.style.display = 'none';
-          playersDiv.textContent = `Players Online: ${data.players.online}/${data.players.max}`;
-        } else {
-          statusDiv.className = 'badge offline';
-          statusText.textContent = 'Offline';
-          spinner.style.display = 'none';
-          playersDiv.textContent = 'Players Online: --';
-          showToast('⚠️ Server seems offline!');
-        }
-      } catch (err) {
-        console.error(err);
+      if (data.online) {
+        statusDiv.className = 'badge online';
+        statusText.textContent = 'Online';
+        spinner.style.display = 'none';
+        playersDiv.textContent = `Players Online: ${data.players.online}/${data.players.max}`;
+      } else {
         statusDiv.className = 'badge offline';
-        statusText.textContent = 'Error';
+        statusText.textContent = 'Offline';
         spinner.style.display = 'none';
         playersDiv.textContent = 'Players Online: --';
-        showToast('⚠️ Unable to reach server!');
+        showToast('⚠️ Server seems offline!');
       }
+    } catch (err) {
+      console.error(err);
+      statusDiv.className = 'badge offline';
+      statusText.textContent = 'Error';
+      spinner.style.display = 'none';
+      playersDiv.textContent = 'Players Online: --';
+      showToast('⚠️ Unable to reach server!');
     }
+  }
 
-    function copyIP() {
-      navigator.clipboard.writeText(serverIp);
-      alert('Server IP copied to clipboard!');
-    }
+  function copyIP() {
+    navigator.clipboard.writeText(serverIp);
+    alert('Server IP copied to clipboard!');
+  }
 
-    function showToast(message) {
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.innerText = message;
-      document.body.appendChild(toast);
-      setTimeout(() => { toast.remove(); }, 4000);
-    }
+  function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerText = message;
+    document.body.appendChild(toast);
+    setTimeout(() => { toast.remove(); }, 4000);
+  }
 
-    fetchStatus();
-    setInterval(fetchStatus, 30000);
-  </script>
+  fetchStatus();
+  setInterval(fetchStatus, 30000);
+</script>
 
 </body>
 </html>
