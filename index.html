@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Laavolt SMP Status</title>
+  <title>Laavolt Status</title>
   <link rel="shortcut icon" href="./images/cur.gif" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css">
@@ -13,21 +13,28 @@
 <body>
 
 <div class="cc site-wide">
-      <div class="pointer"></div>
+  <div class="pointer"></div>
 </div>
 
-<h1><img src="./images/model.png" alt="logo" style="width: 25%;"></h1>
+<header>
+  <div class="top">
+    <a href="https://laavolt.fun">⬅️ <button>Back</button></a>
+  </div>
+</header>
 
-<section class="hero"> 
+<section class="hero">
   <div class="container">
+    <h1><img src="./images/model.png" alt="logo"></h1>
+
     <div class="hero-content">
-      
       <p>IP: <strong id="server-ip">mc.laavolt.fun</strong></p>
       <div id="status" class="badge loading">
         <span id="status-text">Loading...</span>
         <div class="spinner" id="spinner"></div>
       </div>
       <p id="players">Players Online: --</p>
+      <p id="ping">Ping: -- ms <span id="live-dot" style="display: none;">🟢</span></p>
+      <p id="latency-status">Latency: --</p>
 
       <div class="button-group">
         <button class="copy-btn" onclick="copyIP()">Copy IP</button>
@@ -37,7 +44,14 @@
   </div>
 </section>
 
-
+<footer>
+  <div class="container">
+      <div class="footer-content">
+          <h1>By <span class="dofii">Dofii</span></h1>
+          <p>© 2025 LaavoltSMP. All rights reserved.</p>
+      </div>
+  </div>
+</footer>
 
 <script>
   const serverIp = 'mc.laavolt.fun';
@@ -47,26 +61,48 @@
     const statusText = document.getElementById('status-text');
     const spinner = document.getElementById('spinner');
     const playersDiv = document.getElementById('players');
+    const pingDiv = document.getElementById('ping');
+    const latencyText = document.getElementById('latency-status');
 
     statusDiv.className = 'badge loading';
     statusText.textContent = 'Loading...';
     spinner.style.display = 'inline-block';
     playersDiv.textContent = 'Players Online: --';
+    pingDiv.innerHTML = 'Ping: -- ms';
+    latencyText.textContent = 'Latency: --';
+
+    const startTime = performance.now();
 
     try {
       const res = await fetch(`https://api.mcsrvstat.us/2/${serverIp}`);
       const data = await res.json();
+      const ping = Math.round(performance.now() - startTime);
 
       if (data.online) {
         statusDiv.className = 'badge online';
         statusText.textContent = 'Online';
         spinner.style.display = 'none';
         playersDiv.textContent = `Players Online: ${data.players.online}/${data.players.max}`;
+
+        const pingColor = ping > 200 ? '#ffc107' : '#4caf50';
+        const dotEmoji = ping > 200 ? '🟡' : '🟢';
+        pingDiv.innerHTML = `Ping: <span style="color: ${pingColor};">${ping} ms</span> <span id="live-dot">${dotEmoji}</span>`;
+
+        if (ping < 100) {
+          latencyText.innerHTML = 'Latency: <span style="color: #4caf50; font-weight: bold;">Excellent</span> ✅ ';
+        } else if (ping < 200) {
+          latencyText.innerHTML = 'Latency: <span style="color: #ffc107; font-weight: bold;">Good</span> 🟡 ';
+        } else {
+          latencyText.innerHTML = 'Latency: <span style="color: #ff4c4c; font-weight: bold;">Poor</span> 🔴 ';
+        }
+
       } else {
         statusDiv.className = 'badge offline';
         statusText.textContent = 'Offline';
         spinner.style.display = 'none';
         playersDiv.textContent = 'Players Online: --';
+        pingDiv.innerHTML = 'Ping: -- ms';
+        latencyText.textContent = 'Latency: --';
         showToast('⚠️ Server seems offline!');
       }
     } catch (err) {
@@ -75,6 +111,8 @@
       statusText.textContent = 'Error';
       spinner.style.display = 'none';
       playersDiv.textContent = 'Players Online: --';
+      pingDiv.innerHTML = 'Ping: -- ms';
+      latencyText.textContent = 'Latency: --';
       showToast('⚠️ Unable to reach server!');
     }
   }
